@@ -37,7 +37,7 @@ func test2() {
 }
 
 //函数式编程
-func apply(op func(int, int) int, a, b int) int {
+func apply(op func(int, int) int, a, b int) int { //op回调函数
 	p := reflect.ValueOf(op).Pointer()
 	opName := runtime.FuncForPC(p).Name()
 	fmt.Println("Calling function %s with args "+"(%d,%d)", opName, a, b)

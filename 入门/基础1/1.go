@@ -27,6 +27,7 @@ func test() {
 	fmt.Println(v)
 	v.x = 44
 	fmt.Println(v.x)
+	fmt.Println(v)
 	p := &v
 	p.y = 333
 	fmt.Println(v)

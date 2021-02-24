@@ -111,6 +111,33 @@ func ohh(i my_interface) {
 func oo(arg ...interface{}) { //接受任意类型多个参数
 
 }
+
+//-----------------------------------------------------------
+type Itest interface {
+	PP()
+	TT()
+}
+type Hook struct{}
+
+func (h *Hook) PP() {
+	fmt.Println("PP:this is a hook func")
+}
+func (h *Hook) TT() {
+
+	fmt.Println("TT:this is a hook func")
+}
+
+//只要实现了Itest接口就可以对两个钩子方法进行调用
+//或者直接用多态(非常常用)
+func Ohh(s bool, i Itest) {
+	if s {
+		i.PP()
+	} else {
+		i.TT()
+	}
+}
+
+//----------------------------------------------------------
 func main() {
 	fmt.Println("xx")
 	test01()
@@ -120,10 +147,10 @@ func main() {
 	test05()
 	test07()
 	test08()
-	test08()
 	test09()
+	//test10() 有问题
+	test11()
 	var i interface{} //空接口万能类型，保存任意类型的值Println(a ...interface{})
 	i = 1
 	fmt.Println(i)
-	//test10() 有问题
 }

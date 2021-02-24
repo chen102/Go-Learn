@@ -27,8 +27,9 @@ func test01() {
 	//先分配空间再赋值
 	var s5 Student1
 	s5.Person = new(Person)
-	s5.name = "oiadbhg"
-	fmt.Println(s5.name)
+	s5.Person.name = "oiadbhg"
+	fmt.Println(s5.Person.name)
+	fmt.Println(s5.Person)
 
 }
 func test02() {
@@ -45,6 +46,8 @@ func test04() {
 	p2.SetInfoValue("ttasdgt", 'f', 55) //值传递
 	p2.PrintInfo()
 	(&p2).SetInfoPointer("tttt", 'f', 22) //引用传递
+	p2.PrintInfo()
+	p2.SetInfoPointer("Test", 'f', 55) //不用(&p2)也行,见test07
 	p2.PrintInfo()
 }
 func test05() {
@@ -67,12 +70,13 @@ func test08() {
 	s := Student{Person{"c", 'm', 22}, 2, "iii"}
 	s.Print_Info()        //继承Person的方法(以被重写)
 	s.Person.Print_Info() //显式调用继承方法
-	pFunc := s.Print_Info //方法值 隐藏了接受者
+	fmt.Println("-------------------------")
 	p := Person{"gg", 'g', 55}
+	pFunc := p.Print_Info //方法值 隐藏了接受者
 	pFunc()
 	//方法表达式
 	f := (*Person).Print_Info //以类型操作，不用接受者
-	f(&p)
+	f(&p)                     //注意不能用方法集
 	f1 := (Person).Print_Info
 	f1(p)
 }
@@ -105,14 +109,36 @@ func test10() {
 	i[1] = "ggg"
 	i[3] = 'c'
 	for _, data := range i {
-		if ok := data.(int); ok == true {
+		if _, ok := data.(int); ok == true {
 			fmt.Println("int")
-		} else if ok := data.(string); ok == true {
+		} else if _, ok := data.(string); ok == true {
 			fmt.Println("string")
-		} else if ok := data.(byte); ok == true {
+		} else if _, ok := data.(byte); ok == true {
 			fmt.Println("byte")
 		}
 
 	}
 
+}
+
+//对钩子函数进行重写
+type MyFunc struct { //封装一下，即MyFunc继承Hook的所有方法
+	Hook
+}
+
+func (f *MyFunc) PP() {
+	fmt.Println("PP以重写")
+}
+func (f *MyFunc) TT() {
+	fmt.Println("TT以重写")
+}
+func test11() {
+	//实现Itest
+	var i Itest
+	i = &MyFunc{}
+	i.PP()
+	i.TT()
+	//多态
+	Ohh(true, &MyFunc{})
+	Ohh(false, &MyFunc{})
 }
